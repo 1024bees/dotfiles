@@ -31,9 +31,9 @@ vim.cmd('autocmd BufRead,BufNewFile *.md,*.txt setlocal spell spelllang=en_us')
 vim.cmd('autocmd BufWritePost plugins.lua PackerCompile')
 
 -- Keep undo history across sessions by storing it in a file
-if os.execute("ls $HOME/.vim/undo-dir") ~= 0 then
-  os.execute("mkdir -p $HOME/.vim/undo-dir -m=0770")
-end
+--if os.execute("ls $HOME/.vim/undo-dir") ~= 0 then
+--  os.execute("mkdir -p $HOME/.vim/undo-dir -m=0770")
+--end
 
 
 
@@ -52,7 +52,7 @@ o.completeopt="menuone,noselect"
 o.hidden = true
 o.shortmess = 'c'
 o.signcolumn = 'yes'
-o.updatetime = 200
+o.updatetime = 500
 o.history = 50
 o.cmdheight = 2
 o.clipboard='unnamedplus'
@@ -69,8 +69,8 @@ o.compatible = false
 o.showcmd = true
 o.smartcase = true
 o.timeoutlen = 1000
-o.ttimeoutlen = 0
-o.undodir = '~/.vim/undo-dir'
+o.ttimeoutlen = 0  
+o.undodir = os.getenv('HOME') .. '/.vim/undo-dir'
 o.undofile = true
 o.laststatus = 2
 o.smarttab = true

@@ -27,15 +27,23 @@ utils.keymap('n', '<Leader>n', ':bn<Enter>')
 utils.keymap('n', '<Leader>m', ':bp<Enter>')
 
 
-utils.keymap('n', '<Leader>y', '"*y')
-utils.keymap('n', '<Leader>p', '"*p')
-utils.keymap('n', '<Leader>Y', '"+y')
-utils.keymap('n', '<Leader>P', '"+p')
+--utils.keymap('n', '<Leader>y', '"*y')
+--utils.keymap('n', '<Leader>p', '"*p')
+utils.keymap('n', '<Leader>y', '""y')
+utils.keymap('n', '<Leader>p', '""p')
 utils.keymap('n', '<Leader>g', [[:let @*='b ' . expand('%:p') . ":" .line('.')<CR>]])
+utils.keymap('n', 'gt', [[:lua require'lib.utils'.go_to_zsh()<CR>]])
+
 
 --- Indentation Shortcuts ---
 utils.keymap('v','<Tab>','>gv')
 utils.keymap('v','<S-Tab>','<gv')
+utils.keymap('v','<Tab>','>gv')
+
+
+
+
+
 
 
 
@@ -43,14 +51,13 @@ utils.keymap('v','<S-Tab>','<gv')
 --utils.keymap('i','<expr> <Tab>',[[pumvisible() ? "\<C-n>" : "\<Tab>"]],{expr = true})
 --utils.keymap('i','<expr> <S-Tab>',[[pumvisible() ? "\<C-p>" : "\<S-Tab>"]],{expr = true})
 
-vim.cmd[[inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"]]
-vim.cmd[[inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"]]
+--vim.cmd[[inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"]]
+--vim.cmd[[inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"]]
 
 
 
 -- Terminal remaps
 utils.keymap('t','<Esc>', [[<C-\><C-n>]])
-utils.keymap('n', '<C-f>', [[:FZF $ROOT<CR>]])
 utils.keymap('n', '<C-b>', [[:silent! Startify<CR>]])
 
 

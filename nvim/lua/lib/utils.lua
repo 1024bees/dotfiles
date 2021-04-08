@@ -69,5 +69,47 @@ function M.opt(scope, key, value)
   end
 end
 
+function M.is_buffer_empty()
+    -- Check whether the current buffer is empty
+    return vim.fn.empty(vim.fn.expand('%:t')) == 1
+end
+
+function M.has_width_gt(cols)
+    -- Check if the windows width is greater than a given number of columns
+    return vim.fn.winwidth(0) / 2 > cols
+end
+
+
+
+
+function M.buffer_mapping()
+  -- Get the names and buffer num of all currently open buffers
+  local bufnr_to_name = {}
+  for _, buffer in ipairs(vim.split(vim.fn.execute(':buffers! t'), "\n")) do
+      local match = tonumber(string.match(buffer, '%s*(%d+)'))
+      if match then
+        local file_name = vim.api.nvim_buf_get_name(match)
+        bufnr_to_name[match] = file_name
+      end
+  end
+  return bufnr_to_name
+end
+
+
+function M.go_to_zsh()
+  local buffers = M.buffer_mapping()
+  for buffer_nr, _ in pairs(buffers) do
+    if vim.fn.getbufvar(buffer_nr, "&buftype") == "terminal" then
+      vim.fn.execute("buffer " .. buffer_nr)
+      return
+    end
+  end
+  vim.fn.execute("term zsh")
+  M.go_to_zsh()
+end
+
+
+
+
 
 return M

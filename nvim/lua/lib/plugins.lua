@@ -24,7 +24,7 @@ return require('packer').startup(function()
 
 
 
-  use { 'junegunn/limelight.vim' }
+  use {'junegunn/limelight.vim' }
 
   use { 
     'neovim/nvim-lspconfig',
@@ -48,6 +48,24 @@ return require('packer').startup(function()
     'nvim-treesitter/nvim-treesitter',
     config = function() require('lib.plugin.treesitter') end,
   }
+
+  use {
+    'nvim-telescope/telescope.nvim',
+    requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
+    config = function() require('lib.plugin.telescope') end,
+  }
+
+  use {
+        'glepnir/galaxyline.nvim',
+        branch = 'main',
+        config = function() require 'lib.plugin.statusline' end,
+        requires = {'kyazdani42/nvim-web-devicons'}
+    }
+
+
+
+
+
   use { 'tpope/vim-fugitive' } 
   use { 'vimwiki/vimwiki' }
   use { 'powerman/vim-plugin-AnsiEsc' } 
@@ -56,12 +74,6 @@ return require('packer').startup(function()
     config = function() require('lib.plugin.fzf') end
   }
   use { 'junegunn/fzf.vim' }
-
-
-  use {
-    'nvim-telescope/telescope.nvim',
-    requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
-  }
 
 
 

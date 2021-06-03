@@ -1,3 +1,5 @@
+local utils = require'lib.utils' 
+local M = {}
 require('telescope').setup{
   defaults = {
     vimgrep_arguments = {
@@ -47,3 +49,21 @@ require('telescope').setup{
     buffer_previewer_maker = require'telescope.previewers'.buffer_previewer_maker
   }
 }
+
+function my_fd(opts)
+  opts = opts or {}
+  opts.cwd = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+  if string.find(opts.cwd, "fatal") then
+    opts.cwd = vim.fn.expand('%:p:h')
+  end
+  require'telescope.builtin'.find_files(opts)
+end
+
+
+
+
+utils.keymap('n', '<C-f>', [[:lua my_fd()<CR>]])
+utils.keymap('n', '<C-g>', [[:Telescope live_grep<CR>]])
+
+
+

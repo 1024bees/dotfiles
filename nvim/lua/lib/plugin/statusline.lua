@@ -215,6 +215,12 @@ gls.left[13] = {
     }
 }
 
+gls.left[14] = {
+  LeftEnd = {
+    provider = function() return require('lsp-status').status() end,
+  }
+}
+
 -- Right side
 gls.right[1] = {
     DiffAdd = {

@@ -1,7 +1,6 @@
 
 local utils = require'lib.utils'
 local create_augroups = utils.create_augroups
-print(create_augroups)
 local autocmds = {
   load_core = {
     --{"VimEnter",        "*",      [[lua splashscreen()]]};
@@ -26,7 +25,7 @@ local autocmds = {
     {"FileType lua inoremap <C-l> log()<esc>i"};
     {"FileType netrw nnoremap <buffer> q :close<CR>"};
     {"Filetype rust nnoremap <buffer> <Leader>r :term cargo run<CR>"};
-    {"Filetype rust nnoremap <buffer> <Leader>f :term cargo build<CR>  "};
+    --{"Filetype rust nnoremap <buffer> <Leader>f :term cargo build<CR>  "};
     {"Filetype rust nnoremap <buffer> <Leader>t :term cargo test<CR>"};
     {"Filetype rust nnoremap <buffer> <Leader>u unimplemented!()<CR>"};
 
@@ -43,6 +42,7 @@ local autocmds = {
     {"BufReadPost quickfix nnoremap <buffer>R  :Cfilter!<space>"};
     {"BufReadPost quickfix nnoremap <buffer>K  :Cfilter<space>"};
     {"BufReadPost",         "*.fugitiveblame", "set ft=fugitiveblame"};
+    {"CursorMoved,InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost", "*", [[lua require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"} }]] }
   };
   ft_detect = {
     { "BufRead,BufNewFile",  "*.nginx", "set ft=nginx"};

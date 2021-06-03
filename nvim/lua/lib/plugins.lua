@@ -22,9 +22,9 @@ return require('packer').startup(function()
   use { 'mhinz/vim-startify' }
 
 
-
-
   use {'junegunn/limelight.vim' }
+
+  use {'sakhnik/nvim-gdb', run = ":!./install.sh"}
 
   use { 
     'neovim/nvim-lspconfig',
@@ -33,6 +33,8 @@ return require('packer').startup(function()
   }
 
   use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
+
+  use {'nvim-lua/lsp-status.nvim'}
 
   use { 
     'hrsh7th/nvim-compe',
@@ -61,6 +63,14 @@ return require('packer').startup(function()
         config = function() require 'lib.plugin.statusline' end,
         requires = {'kyazdani42/nvim-web-devicons'}
     }
+
+
+  use {
+    'romgrk/barbar.nvim',
+    requires = {'kyazdani42/nvim-web-devicons'}
+  }
+
+
 
 
 

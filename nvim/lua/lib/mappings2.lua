@@ -50,7 +50,6 @@ vim.cmd[[inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"]]
 
 -- Terminal remaps
 utils.keymap('t','<Esc>', [[<C-\><C-n>]])
-utils.keymap('n', '<C-f>', [[:FZF $ROOT<CR>]])
 utils.keymap('n', '<C-b>', [[:silent! Startify<CR>]])
 
 

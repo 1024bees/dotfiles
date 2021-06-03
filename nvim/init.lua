@@ -21,6 +21,7 @@ if fn.empty(fn.glob(packer_path)) > 0 then
 end
 
 
+vim.lsp.set_log_level("debug")
 -- Rust
 --Vim.g.rustfmt_autosave = 1
 --Vim.g.rustfmt_command = "rustup +nightly rustfmt"

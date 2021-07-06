@@ -32,6 +32,7 @@ utils.keymap('n', '<Leader>p', '"*p')
 utils.keymap('n', '<Leader>Y', '"+y')
 utils.keymap('n', '<Leader>P', '"+p')
 utils.keymap('n', '<Leader>g', [[:let @*='b ' . expand('%:p') . ":" .line('.')<CR>]])
+utils.keymap('n', 'gt', [[:lua require'lib.utils'.go_to_zsh()<CR>]])
 
 --- Indentation Shortcuts ---
 utils.keymap('v','<Tab>','>gv')

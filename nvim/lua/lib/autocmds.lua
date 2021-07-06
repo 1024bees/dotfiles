@@ -28,7 +28,8 @@ local autocmds = {
     --{"Filetype rust nnoremap <buffer> <Leader>f :term cargo build<CR>  "};
     {"Filetype rust nnoremap <buffer> <Leader>t :term cargo test<CR>"};
     {"Filetype rust nnoremap <buffer> <Leader>u unimplemented!()<CR>"};
-
+    {"Filetype rust nnoremap <buffer> <Leader>u unimplemented!()<CR>"};
+    {"Filetype python nnoremap <buffer> <Leader>r :term python %<CR>"};
   };
   windows = {
     {"WinEnter", "*", "set number"};
@@ -42,7 +43,7 @@ local autocmds = {
     {"BufReadPost quickfix nnoremap <buffer>R  :Cfilter!<space>"};
     {"BufReadPost quickfix nnoremap <buffer>K  :Cfilter<space>"};
     {"BufReadPost",         "*.fugitiveblame", "set ft=fugitiveblame"};
-    {"CursorMoved,InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost", "*", [[lua require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"} }]] }
+    {"CursorMoved,InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost", "*rs", [[lua require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"} }]] }
   };
   ft_detect = {
     { "BufRead,BufNewFile",  "*.nginx", "set ft=nginx"};

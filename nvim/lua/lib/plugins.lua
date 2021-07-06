@@ -57,6 +57,10 @@ return require('packer').startup(function()
     config = function() require('lib.plugin.telescope') end,
   }
 
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+
+
+  
   use {
         'glepnir/galaxyline.nvim',
         branch = 'main',

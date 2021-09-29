@@ -12,7 +12,7 @@ local autocmds = {
     {"StdinReadPre", "*", "let s:std_in=1"};
     {"TermEnter",       "*",      "set nonumber"};
     {"BufWritePre",     "*",      [[if !isdirectory(expand("<afile>:p:h"))|call mkdir(expand("<afile>:p:h"), "p")|endif]]};
-  
+
     --{"QuickFixCmdPost", "[^l]*",  [[nested lua require'tt.tools'.openQuickfix()]]};
     {"CursorHold,BufWritePost,BufReadPost,BufLeave", "*", [[if isdirectory(expand("<amatch>:h"))|let &swapfile = &modified|endif]]};
     -- { "FileType,BufWinEnter,BufReadPost,BufWritePost,BufEnter,WinEnter,FileChangedShellPost,VimResized" , "*", [[lua vim.wo.statusline = "%!SL()"]] };
@@ -28,8 +28,7 @@ local autocmds = {
     --{"Filetype rust nnoremap <buffer> <Leader>f :term cargo build<CR>  "};
     {"Filetype rust nnoremap <buffer> <Leader>t :term cargo test<CR>"};
     {"Filetype rust nnoremap <buffer> <Leader>u unimplemented!()<CR>"};
-    {"Filetype rust nnoremap <buffer> <Leader>u unimplemented!()<CR>"};
-    {"Filetype python nnoremap <buffer> <Leader>r :term python %<CR>"};
+
   };
   windows = {
     {"WinEnter", "*", "set number"};

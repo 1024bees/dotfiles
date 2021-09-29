@@ -12,91 +12,98 @@ local fn = vim.fn
 --  execute 'packadd packer.nvim'
 --end
 
-vim.cmd [[packadd packer.nvim]]
+vim.cmd([[packadd packer.nvim]])
 
-return require('packer').startup(function()
+return require("packer").startup(function()
   -- Packer can manage itself as an optional plugin
-  use { 'wbthomason/packer.nvim'}
+  use({ "wbthomason/packer.nvim" })
 
-  use { 'scrooloose/nerdtree',  on='NERDTreeToggle' }
-  use { 'mhinz/vim-startify' }
+  use({ "scrooloose/nerdtree", on = "NERDTreeToggle" })
+  use({ "mhinz/vim-startify" })
 
+  use({ "junegunn/limelight.vim" })
 
-  use {'junegunn/limelight.vim' }
+  use({ "sakhnik/nvim-gdb", run = ":!./install.sh" })
 
-  use {'sakhnik/nvim-gdb', run = ":!./install.sh"}
+  use({
+    "neovim/nvim-lspconfig",
+    config = function()
+      require("lib.plugin.lspconfig")
+    end,
+  })
 
-  use { 
-    'neovim/nvim-lspconfig',
-    config = function() require('lib.plugin.lspconfig') end,
+  use({ "npxbr/gruvbox.nvim", requires = { "rktjmp/lush.nvim" } })
 
-  }
+  use({ "nvim-lua/lsp-status.nvim" })
+  use({
+    "jbyuki/venn.nvim",
+    config = function()
+      require("lib.plugin.venn")
+    end,
+  })
+  use({ "L3MON4D3/LuaSnip" })
+  use({'hrsh7th/cmp-nvim-lsp'})
+  use({'hrsh7th/cmp-buffer'})
+  use({
+    "hrsh7th/nvim-cmp",
+    config = function()
+      require("lib.plugin.cmp")
+    end,
+  })
+  use({"rafamadriz/friendly-snippets"})
+  use({ "saadparwaiz1/cmp_luasnip" })
+  --
+  use({ "nvim-lua/lsp_extensions.nvim" })
+  use({ "airblade/vim-gitgutter" })
 
-  use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
+  use({ "kosayoda/nvim-lightbulb" })
+  use({
+    "nvim-treesitter/nvim-treesitter",
+    run = ":TSUpdate",
+    config = function()
+      require("lib.plugin.treesitter")
+    end,
+  })
 
-  use {'nvim-lua/lsp-status.nvim'}
-
-  use { 
-    'hrsh7th/nvim-compe',
-    config = function() require('lib.plugin.compe') end,
-  }
-
-
-  use { 'nvim-lua/lsp_extensions.nvim'}
-  use { 'airblade/vim-gitgutter' }
-
-  use { 'kosayoda/nvim-lightbulb'} 
-  use { 
-    'nvim-treesitter/nvim-treesitter',
-    config = function() require('lib.plugin.treesitter') end,
-  }
-
-  use {
-    'nvim-telescope/telescope.nvim',
-    requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
-    config = function() require('lib.plugin.telescope') end,
-  }
 
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
 
+  use({
+    "nvim-telescope/telescope.nvim",
+    requires = { { "nvim-lua/popup.nvim" }, { "nvim-lua/plenary.nvim" } },
+    config = function()
+      require("lib.plugin.telescope")
+    end,
+  })
 
-  
-  use {
-        'glepnir/galaxyline.nvim',
-        branch = 'main',
-        config = function() require 'lib.plugin.statusline' end,
-        requires = {'kyazdani42/nvim-web-devicons'}
-    }
+  use({
+    "glepnir/galaxyline.nvim",
+    branch = "main",
+    config = function()
+      require("lib.plugin.statusline")
+    end,
+    requires = { "kyazdani42/nvim-web-devicons" },
+  })
 
+  use({
+    "romgrk/barbar.nvim",
+    requires = { "kyazdani42/nvim-web-devicons" },
+  })
 
-  use {
-    'romgrk/barbar.nvim',
-    requires = {'kyazdani42/nvim-web-devicons'}
-  }
+  use({ "tpope/vim-fugitive" })
+  use({ "vimwiki/vimwiki" })
+  use({ "powerman/vim-plugin-AnsiEsc" })
+  use({
+    "junegunn/fzf",
+    config = function()
+      require("lib.plugin.fzf")
+    end,
+  })
+  use({ "junegunn/fzf.vim" })
 
+  use({ "morhetz/gruvbox" })
 
+  use({ "rust-lang/rust.vim" })
 
-
-
-
-
-  use { 'tpope/vim-fugitive' } 
-  use { 'vimwiki/vimwiki' }
-  use { 'powerman/vim-plugin-AnsiEsc' } 
-  use {
-    'junegunn/fzf',
-    config = function() require('lib.plugin.fzf') end
-  }
-  use { 'junegunn/fzf.vim' }
-
-
-
-
-  use { 'morhetz/gruvbox'}
-
-  use { 'rust-lang/rust.vim' }
-
-  use { 'tjdevries/nlua.nvim' }
-
-
+  use({ "tjdevries/nlua.nvim" })
 end)

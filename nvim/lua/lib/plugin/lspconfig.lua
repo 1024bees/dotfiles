@@ -20,6 +20,11 @@ lsp_status.config({
 })
 
 
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+print(lsp_status.capabilities)
+capabilities = vim.tbl_deep_extend("keep", capabilities, lsp_status.capabilities)
+capabilities.textDocument.codeLens = { dynamicRegistration = false }
+capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
 
 
@@ -74,18 +79,17 @@ local on_attach = function(client, bufnr)
       augroup lsp_document_highlight
         autocmd! * <buffer>
         autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-        autocmd CursorHold <buffer> lua vim.lsp.diagnostic.show_line_diagnostics()
+        autocmd CursorHold <buffer> lua vim.lsp.diagnostic.show_line_diagnostics()      
 
       augroup END
     ]], false)
   end
   lsp_status.on_attach(client)
 end
-
-----
+--
 nvim_lsp.rust_analyzer.setup{
   on_attach=on_attach,
-  capabilities = lsp_status.capabilities,
+  capabilities = capabilities,
   settings = {
         ["rust-analyzer"] = {
             assist = {
@@ -117,12 +121,10 @@ nvim_lsp.rust_analyzer.setup{
         },
     }, 
 }
-nvim_lsp.clangd.setup({
-  cmd = { "clangd-9" },
-  on_attach=on_attach})
-
-nvim_lsp.pyls.setup({on_attach=on_attach})
+nvim_lsp.clangd.setup({on_attach=on_attach, cmd= {"clangd-9"}, capabilities = capabilities})
 -- Enable diagnostics
+
+nvim_lsp.pyls.setup({on_attach=on_attach, capabilities = capabilities})
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {

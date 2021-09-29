@@ -80,6 +80,8 @@ function M.has_width_gt(cols)
 end
 
 
+
+
 function M.buffer_mapping()
   -- Get the names and buffer num of all currently open buffers
   local bufnr_to_name = {}
@@ -105,6 +107,9 @@ function M.go_to_zsh()
   vim.fn.execute("term zsh")
   M.go_to_zsh()
 end
+
+
+
 
 
 return M

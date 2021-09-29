@@ -259,22 +259,22 @@ gls.right[5] = {
         highlight = {colors.middlegrey, colors.bg}
     }
 }
---gls.right[6] = {
---    GitBranch = {
---        provider = 'GitBranch',
---        condition = condition.check_git_workspace,
---        highlight = {colors.middlegrey, colors.bg}
---    }
---}
---gls.right[7] = {
---    GitRoot = {
---        provider = {GetGitRoot, function() return ' ' end},
---        condition = function()
---            return utils.has_width_gt(45) and condition.check_git_workspace
---        end,
---        highlight = {colors.middlegrey, colors.bg}
---    }
---}
+gls.right[6] = {
+    GitBranch = {
+        provider = 'GitBranch',
+        condition = condition.check_git_workspace,
+        highlight = {colors.middlegrey, colors.bg}
+    }
+}
+gls.right[7] = {
+    GitRoot = {
+        provider = {GetGitRoot, function() return ' ' end},
+        condition = function()
+            return utils.has_width_gt(45) and condition.check_git_workspace
+        end,
+        highlight = {colors.middlegrey, colors.bg}
+    }
+}
 gls.right[8] = {
     PerCent = {
         provider = 'LinePercent',

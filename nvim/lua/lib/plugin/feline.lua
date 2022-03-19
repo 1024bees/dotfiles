@@ -218,6 +218,9 @@ local comps = {
             hl = {
                 fg = colors.yellow
             }
+        },
+        status = {
+            provider = function() return require('lsp-status').status() end,
         }
     },
     git = {
@@ -276,6 +279,7 @@ table.insert(components.active[3], comps.diagnos.err)
 table.insert(components.active[3], comps.diagnos.warn)
 table.insert(components.active[3], comps.diagnos.hint)
 table.insert(components.active[3], comps.diagnos.info)
+table.insert(components.active[3], comps.lsp.status)
 table.insert(components.active[3], comps.lsp.name)
 table.insert(components.active[3], comps.file.os)
 table.insert(components.active[3], comps.file.position)

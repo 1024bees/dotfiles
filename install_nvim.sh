@@ -1,6 +1,6 @@
 mkdir -p ~/.config/nvim
 mv ~/.config/nvim ~/.config/oldnvim
-ln -s nvim ~/.config/
+ln -s $(readlink -f nvim) ~/.config/
 
 mkdir -p ~/.local/bin/
 cd ~/.local/bin/

@@ -107,7 +107,11 @@ return require("packer").startup(function()
     end
   }
 
-  use {"numToStr/FTerm.nvim"}
+  use {"numToStr/FTerm.nvim",
+    config = function() 
+      require("lib.plugin.fterm")
+    end,
+  }
 
 
   --use({

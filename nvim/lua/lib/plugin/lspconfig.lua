@@ -138,6 +138,35 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 
+nvim_lsp.tsserver.setup({
+    on_attach = function(client, bufnr)
+
+        local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+        local opts = { noremap=true, silent=true }
+
+        client.resolved_capabilities.document_formatting = false
+        client.resolved_capabilities.document_range_formatting = false
+        local ts_utils = require("nvim-lsp-ts-utils")
+        ts_utils.setup({})
+        ts_utils.setup_client(client)
+        buf_set_keymap("n", "gs", ":TSLspOrganize<CR>",opts)
+        buf_set_keymap("n", "gi", ":TSLspRenameFile<CR>",opts)
+        buf_set_keymap("n", "go", ":TSLspImportAll<CR>",opts)
+        on_attach(client, bufnr)
+    end,
+})
+
+local null_ls = require("null-ls")
+null_ls.setup({
+    sources = {
+        null_ls.builtins.diagnostics.eslint,
+        null_ls.builtins.code_actions.eslint,
+        null_ls.builtins.formatting.prettier
+    },
+    on_attach = on_attach
+})
+
+
 
 --vim.cmd([[ autocmd ColorScheme * :lua require('vim.diagnostic')._define_default_signs_and_highlights() ]]) 
 

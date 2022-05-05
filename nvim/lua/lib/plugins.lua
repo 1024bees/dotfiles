@@ -87,13 +87,18 @@ return require("packer").startup(function()
   use{
     "feline-nvim/feline.nvim",
     config = function()
-      print("fart")
       require("lib.plugin.feline")
     end,
     requires = { "kyazdani42/nvim-web-devicons" },
 
   }
-
+  
+  use {
+    "p00f/godbolt.nvim",
+    config = function()
+      require("lib.plugin.godbolt")
+    end
+  }
 
   use {
     "folke/trouble.nvim",
@@ -144,4 +149,8 @@ return require("packer").startup(function()
   use({ "rust-lang/rust.vim" })
 
   use({ "tjdevries/nlua.nvim" })
+  use({"jose-elias-alvarez/null-ls.nvim"})
+  use({"jose-elias-alvarez/nvim-lsp-ts-utils"})
+
+
 end)

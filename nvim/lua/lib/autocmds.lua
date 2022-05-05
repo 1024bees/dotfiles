@@ -27,7 +27,7 @@ local autocmds = {
     --{"Filetype rust nnoremap <buffer> <Leader>f :term cargo build<CR>  "};
     {"Filetype rust nnoremap <buffer> <Leader>t :Ferm cargo test<CR>"};
     {"Filetype rust nnoremap <buffer> <Leader>u unimplemented!()<CR>"};
-    {"Filetype python nnoremap <buffer> <Leader>r :Ferm python %<CR>"};
+    {"Filetype python nnoremap <buffer> <Leader>r :Perm "};
 
 
 

@@ -166,6 +166,7 @@ null_ls.setup({
     on_attach = on_attach
 })
 
+--nvim_lsp.eslint.setup({on_attach=on_attach})
 
 
 --vim.cmd([[ autocmd ColorScheme * :lua require('vim.diagnostic')._define_default_signs_and_highlights() ]]) 

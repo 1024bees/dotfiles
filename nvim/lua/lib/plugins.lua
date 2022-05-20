@@ -14,6 +14,8 @@ local fn = vim.fn
 
 vim.cmd([[packadd packer.nvim]])
 
+
+
 return require("packer").startup(function()
   -- Packer can manage itself as an optional plugin
   use({ "wbthomason/packer.nvim" })
@@ -118,6 +120,14 @@ return require("packer").startup(function()
     end,
   }
 
+  use {
+      "nvim-neorg/neorg",
+      config = function()
+          require('lib.plugin.neorg')
+      end,
+      requires = {"nvim-lua/plenary.nvim",   "folke/zen-mode.nvim"},
+
+  }
 
   --use({
   --  "NTBBloodbath/galaxyline.nvim",

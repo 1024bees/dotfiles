@@ -20,6 +20,8 @@ return require("packer").startup(function()
   -- Packer can manage itself as an optional plugin
   use({ "wbthomason/packer.nvim" })
 
+  use({ "mzlogin/vim-markdown-toc"})
+
   use({ "scrooloose/nerdtree", on = "NERDTreeToggle" })
   use({ "mhinz/vim-startify" })
 

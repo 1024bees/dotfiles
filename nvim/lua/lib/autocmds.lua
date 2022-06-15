@@ -24,7 +24,6 @@ local autocmds = {
     {"FileType lua inoremap <C-l> log()<esc>i"};
     {"FileType netrw nnoremap <buffer> q :close<CR>"};
     {"Filetype rust nnoremap <buffer> <Leader>r :Ferm cargo run<CR>"};
-    --{"Filetype rust nnoremap <buffer> <Leader>f :term cargo build<CR>  "};
     {"Filetype rust nnoremap <buffer> <Leader>t :Ferm cargo test<CR>"};
     {"Filetype rust nnoremap <buffer> <Leader>u unimplemented!()<CR>"};
     {"Filetype python nnoremap <buffer> <Leader>r :Perm "};

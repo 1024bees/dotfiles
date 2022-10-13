@@ -36,6 +36,8 @@ return require("packer").startup(function()
     end
   })
 
+  use {'akinsho/flutter-tools.nvim', requires = 'nvim-lua/plenary.nvim'}
+
   use({ "npxbr/gruvbox.nvim", requires = { "rktjmp/lush.nvim" } })
 
   use({ "nvim-lua/lsp-status.nvim" })

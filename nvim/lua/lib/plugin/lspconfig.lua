@@ -106,7 +106,7 @@ nvim_lsp.rust_analyzer.setup{
             },
 
             checkOnSave = {
-                allFeatures = true,
+                --allFeatures = true,
             },
 
             procMacro = {
@@ -165,6 +165,8 @@ null_ls.setup({
     },
     on_attach = on_attach
 })
+
+require("flutter-tools").setup{lsp={on_attach=on_attach}} -- use defaults
 
 --nvim_lsp.eslint.setup({on_attach=on_attach})
 

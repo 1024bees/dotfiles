@@ -4,7 +4,7 @@ ln -s $(readlink -f nvim) ~/.config/
 
 mkdir -p ~/.local/bin/
 cd ~/.local/bin/
-wget https://github.com/neovim/neovim/releases/download/v0.6.1/nvim.appimage
+wget https://github.com/neovim/neovim/releases/download/v0.7.0/nvim.appimage
 mv nvim.appimage nvim
 chmod +x nvim
 

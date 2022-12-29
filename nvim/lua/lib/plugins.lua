@@ -25,6 +25,7 @@ return require("packer").startup(function()
   use({ "scrooloose/nerdtree", on = "NERDTreeToggle" })
   use({ "mhinz/vim-startify" })
 
+  use ({'mfussenegger/nvim-dap'})
   use({ "junegunn/limelight.vim" })
 
   use({ "sakhnik/nvim-gdb", run = ":!./install.sh" })
@@ -124,14 +125,14 @@ return require("packer").startup(function()
     end,
   }
 
-  use {
-      "nvim-neorg/neorg",
-      config = function()
-          require('lib.plugin.neorg')
-      end,
-      requires = {"nvim-lua/plenary.nvim",   "folke/zen-mode.nvim"},
+  --use {
+  --    "nvim-neorg/neorg",
+  --    config = function()
+  --        require('lib.plugin.neorg')
+  --    end,
+  --    requires = {"nvim-lua/plenary.nvim",   "folke/zen-mode.nvim"},
 
-  }
+  --}
 
   --use({
   --  "NTBBloodbath/galaxyline.nvim",
@@ -159,6 +160,7 @@ return require("packer").startup(function()
   use({ "junegunn/fzf.vim" })
 
   use({ "morhetz/gruvbox" })
+  use({ "simrat39/rust-tools.nvim"})
 
   use({ "rust-lang/rust.vim" })
 

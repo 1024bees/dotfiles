@@ -23,7 +23,7 @@ lsp_status.config({
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = vim.tbl_deep_extend("keep", capabilities, lsp_status.capabilities)
 capabilities.textDocument.codeLens = { dynamicRegistration = false }
-capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 
 
@@ -86,41 +86,80 @@ local on_attach = function(client, bufnr)
   end
   lsp_status.on_attach(client)
 end
+
+local rt = require("rust-tools")
+
+rt.setup({
+  server = {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+          ["rust-analyzer"] = {
+              assist = {
+                  importMergeBehaviour = "full",
+                  importPrefix = "plain",
+              },
+                                                          
+              callInfo = {
+                  full = true,
+              };
+                                                          
+              cargo = {
+                  loadOutDirsFromCheck = true
+              },
+                                                          
+              checkOnSave = {
+                  --allFeatures = true,
+              },
+                                                          
+              procMacro = {
+                  enable = true,
+              },
+              diagnostics = {
+                  enable = true,
+                  disabled = { "unresolved-proc-macro" },
+                  enableExperimental = true,
+                  warningsAsHint = {},
+              },
+          },
+      },
+  },
+})
+
+--nvim_lsp.rust_analyzer.setup{
+--  on_attach=on_attach,
+--  capabilities = capabilities,
+--  settings = {
+--        ["rust-analyzer"] = {
+--            assist = {
+--                importMergeBehaviour = "full",
+--                importPrefix = "plain",
+--            },
 --
-nvim_lsp.rust_analyzer.setup{
-  on_attach=on_attach,
-  capabilities = capabilities,
-  settings = {
-        ["rust-analyzer"] = {
-            assist = {
-                importMergeBehaviour = "full",
-                importPrefix = "plain",
-            },
-
-            callInfo = {
-                full = true,
-            };
-
-            cargo = {
-                loadOutDirsFromCheck = true
-            },
-
-            checkOnSave = {
-                --allFeatures = true,
-            },
-
-            procMacro = {
-                enable = true,
-            },
-            diagnostics = {
-                enable = true,
-                disabled = { "unresolved-proc-macro" },
-                enableExperimental = true,
-                warningsAsHint = {},
-            },
-        },
-    }, 
-}
+--            callInfo = {
+--                full = true,
+--            };
+--
+--            cargo = {
+--                loadOutDirsFromCheck = true
+--            },
+--
+--            checkOnSave = {
+--                --allFeatures = true,
+--            },
+--
+--            procMacro = {
+--                enable = true,
+--            },
+--            diagnostics = {
+--                enable = true,
+--                disabled = { "unresolved-proc-macro" },
+--                enableExperimental = true,
+--                warningsAsHint = {},
+--            },
+--        },
+--    }, 
+--}
 nvim_lsp.clangd.setup({on_attach=on_attach, cmd= {"clangd-12"}, capabilities = capabilities})
 -- Enable diagnostics
 

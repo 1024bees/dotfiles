@@ -25,14 +25,25 @@ return require("packer").startup(function()
   use({ "mhinz/vim-startify" })
   use({ "junegunn/limelight.vim" })
 
-  use({ "sakhnik/nvim-gdb", run = ":!./install.sh" })
-
   use({
     "neovim/nvim-lspconfig",
     config = function()
       require("lib.plugin.lspconfig")
     end,
   })
+
+  use({
+    "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim",
+    "jay-babu/mason-nvim-dap.nvim",
+    "jay-babu/mason-null-ls.nvim",
+    run = ":MasonUpdate", -- :MasonUpdate updates registry contents,
+    config = function()
+      require("lib.plugin.mason")
+    end,
+  })
+
+
 
   use({ "akinsho/flutter-tools.nvim", requires = "nvim-lua/plenary.nvim" })
 
@@ -166,5 +177,8 @@ return require("packer").startup(function()
       require("lib.plugin.dap")
     end,
   })
-  use({ "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } })
+  use({
+    "rcarriga/nvim-dap-ui",
+    requires = { "mfussenegger/nvim-dap" },
+  })
 end)

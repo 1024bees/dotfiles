@@ -1,9 +1,22 @@
 local dap = require("dap")
-dap.adapters.lldb = {
-  type = "executable",
-  command = "/usr/bin/lldb-vscode-10", -- adjust as needed, must be absolute path
-  name = "lldb",
-}
+---dap.adapters.lldb = {
+---  type = "executable",
+---  command = "/usr/bin/lldb-vscode-10", -- adjust as needed, must be absolute path
+---  name = "lldb",
+---}
+---
+---local extension_path = vim.env.HOME .. "/.config/vscode/extension/"
+---local codelldb_path = extension_path .. "adapter/codelldb"
+---local liblldb_path = extension_path .. "lldb/lib/liblldb.so" -- MacOS: This may be .dylib
+---
+---dap.adapters.codelldb = {
+---  type = "server",
+---  port = "13000",
+---  executable = {
+---    command = codelldb_path,
+---    args = { "--port", "13000"},
+---  },
+---}
 
 dap.configurations.cpp = {
   {
@@ -35,4 +48,3 @@ dap.configurations.cpp = {
 -- If you want to use this for Rust and C, add something like this:
 
 dap.configurations.c = dap.configurations.cpp
---dap.configurations.rust = dap.configurations.cpp

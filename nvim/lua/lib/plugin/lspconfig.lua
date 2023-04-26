@@ -1,4 +1,26 @@
 -- nvim_lsp object
+--
+--
+--
+
+require("mason").setup()
+
+require("mason-lspconfig").setup({
+  ensure_installed = {
+    -- Replace these with whatever servers you want to install
+    "lua_ls",
+    "rust_analyzer",
+    "clangd",
+    "cmake",
+    "pylsp",
+    "bashls",
+  },
+})
+
+require("mason-null-ls").setup({
+  ensure_installed = { "stylua", "jq", "eslint", "prettier" },
+})
+
 local nvim_lsp = require("lspconfig")
 local lsp_status = require("lsp-status")
 ---local lsp_extension = require'lsp_extensions'
@@ -94,11 +116,15 @@ end
 
 local rt = require("rust-tools")
 
+local extension_path = vim.env.HOME .. "/.config/vscode/extension/"
+local codelldb_path = extension_path .. "adapter/codelldb"
+local liblldb_path = extension_path .. "lldb/lib/liblldb.so" -- MacOS: This may be .dylib
+
 rt.setup({
   server = {
     on_attach = function(client, bufnr)
       on_attach(client, bufnr)
-      vim.keymap.set("n", "A", rt.code_action_group.code_action_group, { buffer = bufnr })
+      vim.keymap.set("n", "A", rt.hover_actions.hover_actions, { buffer = bufnr })
     end,
     capabilities = capabilities,
     settings = {
@@ -111,17 +137,32 @@ rt.setup({
         callInfo = {
           full = true,
         },
+        imports = {
+          granularity = {
+            enforce = true,
+            group = "crate",
+          },
+        },
 
         cargo = {
+          unsetTest = { "core", "esp-hal-common", "esp-hal-procmacros", "esp32-hal", "esp32c3-hal" },
           loadOutDirsFromCheck = true,
+          --noDefaultFeatures = true,
+          buildScripts = {
+            enable = "true",
+          },
         },
 
         checkOnSave = {
-          --allFeatures = true,
+          allFeatures = true,
+          allTargets = false,
         },
 
         procMacro = {
           enable = true,
+          attributes = {
+            enable = true,
+          },
         },
         diagnostics = {
           enable = true,
@@ -134,11 +175,7 @@ rt.setup({
   },
 
   dap = {
-    adapter = {
-      type = "executable",
-      command = "lldb-vscode-10",
-      name = "rt_lldb",
-    },
+    adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
   },
 })
 
@@ -176,9 +213,9 @@ rt.setup({
 --        },
 --    },
 --}
-nvim_lsp.clangd.setup({ on_attach = on_attach, cmd = { "clangd-12" }, capabilities = capabilities })
+nvim_lsp.clangd.setup({ on_attach = on_attach, cmd = { "clangd" }, capabilities = capabilities })
 -- Enable diagnostics
-
+vim.lsp.set_log_level("info")
 --nvim_lsp.pyls.setup({on_attach=on_attach, capabilities = capabilities})
 nvim_lsp.pylsp.setup({ on_attach = on_attach, capabilities = capabilities })
 

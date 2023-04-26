@@ -5,26 +5,23 @@
 -- Key remaps
 local remap = vim.api.nvim_set_keymap
 vim.g.mapleader = " "
-local utils = require('lib.utils')
+local utils = require("lib.utils")
 
 local fn = vim.fn
 
-local packer_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-local packer_repo = 'https://github.com/wbthomason/packer.nvim'
-local packer_install_cmd =
-    '!git clone ' .. ' ' .. packer_repo .. ' ' .. packer_path
+local packer_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+local packer_repo = "https://github.com/wbthomason/packer.nvim"
+local packer_install_cmd = "!git clone " .. " " .. packer_repo .. " " .. packer_path
 
 -- Install packer if missing as opt plugin
 if fn.empty(fn.glob(packer_path)) > 0 then
   print("we are executing!")
   execute(packer_install_cmd)
-  execute('packadd packer.nvim')
+  execute("packadd packer.nvim")
 end
 
-
-
-
-vim.api.nvim_exec([[
+vim.api.nvim_exec(
+  [[
 function! Get_visual_selection()
     " Why is this not a built-in Vim script function?!
     let [line_start, column_start] = getpos("'<")[1:2]
@@ -52,24 +49,21 @@ function! Bazelify()
   let @" = pstr
 endfunction
 ]],
-false)
+  false
+)
 
-utils.keymap('v', '<Leader>e', ':call Bazelify()<Enter>')
-
-
-
-
-
+utils.keymap("v", "<Leader>e", ":call Bazelify()<Enter>")
 
 -- Rust
 --Vim.g.rustfmt_autosave = 1
 --Vim.g.rustfmt_command = "rustup +nightly rustfmt"
 --Vim.g.rustfmt_recommended_style = 0
 --Vim.g.mix_format_on_save = 1
-require('lib.mappings2')
-require('lib.autocmds')
-require('lib.plugins')
-vim.cmd('colorscheme gruvbox')
-require('lib.settings')
+require("lib.mappings2")
+require("lib.autocmds")
+require("lib.plugins")
+vim.cmd("colorscheme gruvbox")
+require("lib.settings")
+--require("lib.plugin.dapui")
 
 require("luasnip.loaders.from_vscode").lazy_load()

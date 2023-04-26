@@ -32,6 +32,17 @@ return require("packer").startup(function()
     end,
   })
 
+  use({ "aduros/ai.vim" })
+
+  use({
+    "samjwill/nvim-unception",
+    setup = function()
+      vim.g.unception_delete_replaced_buffer = true
+      --vim.g.unception_open_buffer_in_new_tab = true
+      -- Optional settings go here!
+      -- e.g.) vim.g.unception_open_buffer_in_new_tab = true
+    end,
+  })
   use({
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
@@ -42,8 +53,6 @@ return require("packer").startup(function()
       require("lib.plugin.mason")
     end,
   })
-
-
 
   use({ "akinsho/flutter-tools.nvim", requires = "nvim-lua/plenary.nvim" })
 

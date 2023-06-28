@@ -21,6 +21,13 @@ return require("packer").startup(function()
 
   use({ "mzlogin/vim-markdown-toc" })
 
+  use({
+    "ellisonleao/glow.nvim",
+    config = function()
+      require("glow").setup()
+    end,
+  })
+
   use({ "scrooloose/nerdtree", on = "NERDTreeToggle" })
   use({ "mhinz/vim-startify" })
   use({ "junegunn/limelight.vim" })
@@ -33,6 +40,18 @@ return require("packer").startup(function()
   })
 
   use({ "aduros/ai.vim" })
+
+  use({
+    "jackMort/ChatGPT.nvim",
+    config = function()
+      require("chatgpt").setup()
+    end,
+    requires = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+    },
+  })
 
   use({
     "samjwill/nvim-unception",

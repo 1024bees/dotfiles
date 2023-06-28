@@ -128,6 +128,7 @@ rt.setup({
     end,
     capabilities = capabilities,
     settings = {
+
       ["rust-analyzer"] = {
         assist = {
           importMergeBehaviour = "full",
@@ -155,7 +156,7 @@ rt.setup({
 
         checkOnSave = {
           allFeatures = true,
-          allTargets = false,
+          --allTargets = false,
         },
 
         procMacro = {
@@ -218,6 +219,8 @@ nvim_lsp.clangd.setup({ on_attach = on_attach, cmd = { "clangd" }, capabilities 
 vim.lsp.set_log_level("info")
 --nvim_lsp.pyls.setup({on_attach=on_attach, capabilities = capabilities})
 nvim_lsp.pylsp.setup({ on_attach = on_attach, capabilities = capabilities })
+
+nvim_lsp.tailwindcss.setup({ on_attach = on_attach, capabilities = capabilities })
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
   virtual_text = true,

@@ -28,6 +28,7 @@ return require("packer").startup(function()
     end,
   })
 
+  use({ "ms-jpq/coq_nvim"})
   use({ "scrooloose/nerdtree", on = "NERDTreeToggle" })
   use({ "mhinz/vim-startify" })
   use({ "junegunn/limelight.vim" })
@@ -40,6 +41,8 @@ return require("packer").startup(function()
   })
 
   use({ "aduros/ai.vim" })
+
+  use({ "LnL7/vim-nix" })
 
   use({
     "jackMort/ChatGPT.nvim",

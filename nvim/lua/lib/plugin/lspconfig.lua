@@ -40,10 +40,11 @@ lsp_status.config({
   spinner_frames = { "-", "\\", "|", "/" },
 })
 
+local coq = require("coq")
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = vim.tbl_deep_extend("keep", capabilities, lsp_status.capabilities)
 capabilities.textDocument.codeLens = { dynamicRegistration = false }
-capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+capabilities = coq.lsp_ensure_capabilities(capabilities)
 
 -- Enable rust_analyzer
 
@@ -219,6 +220,7 @@ nvim_lsp.clangd.setup({ on_attach = on_attach, cmd = { "clangd" }, capabilities 
 vim.lsp.set_log_level("info")
 --nvim_lsp.pyls.setup({on_attach=on_attach, capabilities = capabilities})
 nvim_lsp.pylsp.setup({ on_attach = on_attach, capabilities = capabilities })
+nvim_lsp.rnix.setup({ on_attach = on_attach, capabilities = capabilities })
 
 nvim_lsp.tailwindcss.setup({ on_attach = on_attach, capabilities = capabilities })
 

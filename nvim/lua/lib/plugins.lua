@@ -28,7 +28,7 @@ return require("packer").startup(function()
     end,
   })
 
-  use({ "ms-jpq/coq_nvim"})
+  use({ "ms-jpq/coq_nvim" })
   use({ "scrooloose/nerdtree", on = "NERDTreeToggle" })
   use({ "mhinz/vim-startify" })
   use({ "junegunn/limelight.vim" })
@@ -78,6 +78,16 @@ return require("packer").startup(function()
 
   use({ "akinsho/flutter-tools.nvim", requires = "nvim-lua/plenary.nvim" })
 
+  use({
+    "sotte/presenting.nvim",
+    config = function()
+      require("presenting").setup({
+        options = {
+          width = 240,
+        },
+      })
+    end,
+  })
   use({ "npxbr/gruvbox.nvim", requires = { "rktjmp/lush.nvim" } })
 
   use({ "nvim-lua/lsp-status.nvim" })
@@ -105,16 +115,16 @@ return require("packer").startup(function()
   use({ "airblade/vim-gitgutter" })
 
   use({ "kosayoda/nvim-lightbulb" })
-  --use({
-  --  "nvim-treesitter/nvim-treesitter",
-  --  run = function()
-  --    local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
-  --    ts_update()
-  --  end,
-  --  config = function()
-  --    require("lib.plugin.treesitter")
-  --  end,
-  --})
+  use({
+    "nvim-treesitter/nvim-treesitter",
+    run = function()
+      local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
+      ts_update()
+    end,
+    config = function()
+      require("lib.plugin.treesitter")
+    end,
+  })
 
   use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 

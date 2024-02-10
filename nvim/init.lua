@@ -16,6 +16,7 @@ local packer_install_cmd = "!git clone " .. " " .. packer_repo .. " " .. packer_
 -- Install packer if missing as opt plugin
 if fn.empty(fn.glob(packer_path)) > 0 then
   print("we are executing!")
+  print(packer_install_cmd)
   execute(packer_install_cmd)
   execute("packadd packer.nvim")
 end

@@ -32,6 +32,7 @@ utils.keymap("v", "<Tab>", ">gv")
 utils.keymap("v", "<S-Tab>", "<gv")
 utils.keymap("v", "<Tab>", ">gv")
 
+utils.keymap("n", "<Leader>c", ":ChatGPT<CR>")
 -- Debugging
 utils.keymap("n", "<Leader>g", ":lua require('dap').toggle_breakpoint()<CR>")
 utils.keymap("n", "<F1>", ":lua require('dap').step_over()<CR>")

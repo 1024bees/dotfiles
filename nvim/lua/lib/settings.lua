@@ -96,6 +96,7 @@ wo.wrap = true
 --bo.softtabstop = 2
 --bo.shiftwidth = 2
 
+vim.g.vimwiki_global_ext = 0
 
 bo.fileencoding= 'utf-8'
 opt('b', 'shiftwidth', 2)

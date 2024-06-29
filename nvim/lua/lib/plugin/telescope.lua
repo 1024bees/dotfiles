@@ -1,30 +1,27 @@
-local utils = require'lib.utils' 
+local utils = require("lib.utils")
 local M = {}
 
-
-require('telescope').setup{
+require("telescope").setup({
   defaults = {
     vimgrep_arguments = {
-      'rg',
-      '--color=never',
-      '--no-heading',
-      '--with-filename',
-      '--line-number',
-      '--column',
-      '--smart-case'
+      "rg",
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+      "--smart-case",
     },
     extensions = {
       fzf = {
-        fuzzy = true,                    -- false will only do exact matching
+        fuzzy = true, -- false will only do exact matching
         override_generic_sorter = false, -- override the generic sorter
-        override_file_sorter = true,     -- override the file sorter
-        case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
-                                         -- the default case_mode is "smart_case"
-      }
+        override_file_sorter = true, -- override the file sorter
+        case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+        -- the default case_mode is "smart_case"
+      },
     },
 
-
-    
     prompt_prefix = "> ",
     selection_caret = "> ",
     entry_prefix = "  ",
@@ -32,11 +29,11 @@ require('telescope').setup{
     selection_strategy = "reset",
     sorting_strategy = "descending",
     layout_strategy = "horizontal",
-    file_sorter =  require'telescope.sorters'.get_fuzzy_file,
+    file_sorter = require("telescope.sorters").get_fuzzy_file,
     file_ignore_patterns = {},
-    generic_sorter =  require'telescope.sorters'.get_generic_fuzzy_sorter,
+    generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
     winblend = 0,
-    layout_config = { 
+    layout_config = {
       horizontal = {
         mirror = false,
       },
@@ -48,37 +45,59 @@ require('telescope').setup{
       prompt_position = "bottom",
     },
     border = {},
-    borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
+    borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
     color_devicons = true,
     use_less = true,
-    set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
-    file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
-    grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
-    qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
+    set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
+    file_previewer = require("telescope.previewers").vim_buffer_cat.new,
+    grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
+    qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
 
     -- Developer configurations: Not meant for general override
-    buffer_previewer_maker = require'telescope.previewers'.buffer_previewer_maker
-  }
-}
+    buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
+  },
+})
 
-
-
-require('telescope').load_extension('fzf')
-
+require("telescope").load_extension("fzf")
 
 function my_fd(opts)
   opts = opts or {}
   opts.cwd = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
   if string.find(opts.cwd, "fatal") then
-    opts.cwd = vim.fn.expand('%:p:h')
+    opts.cwd = vim.fn.expand("%:p:h")
   end
-  require'telescope.builtin'.find_files(opts)
+  require("telescope.builtin").find_files(opts)
 end
 
+function find_dot(prompt_bufnr)
+  local action_state = require("telescope.actions.state")
+  local fb = require("telescope").extensions.file_browser
+  local live_grep = require("telescope.builtin").find_files
+  local current_line = action_state.get_current_line()
 
+  fb.file_browser({
+    files = false,
+    depth = false,
+    attach_mappings = function(prompt_bufnr)
+      require("telescope.actions").select_default:replace(function()
+        local entry_path = "~/dotfiles"
+        local relative = dir:make_relative(vim.fn.getcwd())
+        local absolute = dir:absolute()
 
+        live_grep({
+          results_title = relative .. "/",
+          cwd = absolute,
+          default_text = current_line,
+        })
+      end)
 
-utils.keymap('n', '<C-f>', [[:lua my_fd()<CR>]])
-utils.keymap('n', '<C-g>', [[:Telescope live_grep<CR>]])
+      return true
+    end,
+  })
+end
 
+utils.keymap("n", "ff", [[:lua my_fd()<CR>]])
+utils.keymap("n", "df", ":cd ~/dotfiles | lua my_fd()<CR>")
+utils.keymap("n", "cc", [[C-c]])
 
+utils.keymap("n", "gg", [[:Telescope live_grep<CR>]])

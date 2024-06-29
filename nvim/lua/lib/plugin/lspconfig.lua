@@ -12,13 +12,14 @@ require("mason-lspconfig").setup({
     "rust_analyzer",
     "clangd",
     "cmake",
-    "pylsp",
+
+    "basedpyright",
     "bashls",
   },
 })
 
 require("mason-null-ls").setup({
-  ensure_installed = { "stylua", "jq", "eslint", "prettier" },
+  ensure_installed = { "stylua", "jq", "eslint" },
 })
 
 local nvim_lsp = require("lspconfig")
@@ -47,6 +48,8 @@ capabilities.textDocument.codeLens = { dynamicRegistration = false }
 capabilities = coq.lsp_ensure_capabilities(capabilities)
 
 -- Enable rust_analyzer
+
+local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
 require("vim.diagnostic")
 
@@ -91,6 +94,14 @@ local on_attach = function(client, bufnr)
   if client.server_capabilities.documentFormattingProvider then
     buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.format{async = true}<CR>", opts)
   end
+
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    group = augroup,
+    buffer = bufnr,
+    callback = function()
+      vim.lsp.buf.format()
+    end,
+  })
 
   -- Set autocommands conditional on server_capabilities
   -- autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
@@ -143,6 +154,31 @@ rt.setup({
           granularity = {
             enforce = true,
             group = "crate",
+          },
+        },
+        files = {
+          excludeDirs = {
+            "_build",
+            ".dart_tool",
+            ".flatpak-builder",
+            ".git",
+            ".gitlab",
+            ".gitlab-ci",
+            ".gradle",
+            ".idea",
+            ".next",
+            ".project",
+            ".scannerwork",
+            ".settings",
+            ".venv",
+            "archetype-resources",
+            "bin",
+            "hooks",
+            "node_modules",
+            "po",
+            "screenshots",
+            "target",
+            "website",
           },
         },
 
@@ -215,12 +251,32 @@ rt.setup({
 --        },
 --    },
 --}
-nvim_lsp.clangd.setup({ on_attach = on_attach, cmd = { "clangd" }, capabilities = capabilities })
+nvim_lsp.clangd.setup({
+  on_attach = on_attach,
+  cmd = { "clangd" },
+  capabilities = capabilities,
+  filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
+})
 -- Enable diagnostics
 vim.lsp.set_log_level("info")
---nvim_lsp.pyls.setup({on_attach=on_attach, capabilities = capabilities})
-nvim_lsp.pylsp.setup({ on_attach = on_attach, capabilities = capabilities })
+--nvim_lsp.pylsp.setup({on_attach=on_attach, capabilities = capabilities})
+nvim_lsp.basedpyright.setup({
+  on_attach = on_attach,
+  capabilities = server_capabilities,
+  settings = {
+    basedpyright = {
+      typeCheckingMode = "basic",
+    },
+  },
+})
+
 nvim_lsp.rnix.setup({ on_attach = on_attach, capabilities = capabilities })
+nvim_lsp.buck2.setup({ on_attach = on_attach, capabilities = capabilities })
+nvim_lsp.bufls.setup({ on_attach = on_attach, capabilities = capabilities })
+
+nvim_lsp.svls.setup({ on_attach = on_attach, capabilities = capabilities })
+
+nvim_lsp.taplo.setup({ on_attach = on_attach, capabilities = capabilities })
 
 nvim_lsp.tailwindcss.setup({ on_attach = on_attach, capabilities = capabilities })
 
@@ -230,7 +286,8 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
   update_in_insert = true,
 })
 
-nvim_lsp.tsserver.setup({
+local tss = require("typescript-tools")
+tss.setup({
   on_attach = function(client, bufnr)
     local function buf_set_keymap(...)
       vim.api.nvim_buf_set_keymap(bufnr, ...)
@@ -252,10 +309,11 @@ nvim_lsp.tsserver.setup({
 local null_ls = require("null-ls")
 null_ls.setup({
   sources = {
-    null_ls.builtins.diagnostics.eslint,
+    --null_ls.builtins.diagnostics.eslint,
     null_ls.builtins.code_actions.eslint,
     null_ls.builtins.formatting.prettier,
-    --null_ls.builtins.formatting.stylua
+    null_ls.builtins.formatting.black,
+    --null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.stylua.with({ extra_args = { "--indent-type", "Spaces", "--indent-width", "2" } }),
   },
   on_attach = on_attach,

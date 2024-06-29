@@ -107,7 +107,8 @@ opt('b', 'expandtab', true)
 opt('b', 'autoindent', true)
 
 
-vim.g.python3_host_prog = '/usr/bin/python3'
+vim.g.python3_host_prog = '/opt/homebrew/bin/python3'
+
 
 -- Colorscheme
 vim.g.base16colorspace = 256

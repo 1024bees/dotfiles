@@ -26,13 +26,15 @@ utils.keymap("n", "<Leader>m", ":bp<Enter>")
 utils.keymap("n", "<Leader>y", '""y')
 utils.keymap("n", "<Leader>p", '""p')
 utils.keymap("n", "gt", [[:lua require'lib.utils'.go_to_zsh()<CR>]])
+utils.keymap("n", "nt", [[:lua require'lib.utils'.new_vsplit_zsh()<CR>]])
 
 --- Indentation Shortcuts ---
 utils.keymap("v", "<Tab>", ">gv")
 utils.keymap("v", "<S-Tab>", "<gv")
 utils.keymap("v", "<Tab>", ">gv")
 
-utils.keymap("n", "<Leader>c", ":ChatGPT<CR>")
+utils.keymap("n", "<Leader>c", ":CopilotChatToggle<CR>")
+
 -- Debugging
 utils.keymap("n", "<Leader>g", ":lua require('dap').toggle_breakpoint()<CR>")
 utils.keymap("n", "<F1>", ":lua require('dap').step_over()<CR>")
@@ -42,8 +44,6 @@ utils.keymap("n", "<F3>", ":lua require('dap').step_out()<CR>")
 utils.keymap("n", "<Leader>dn", ":lua require('dap').step_over()<CR>")
 utils.keymap("n", "<Leader>ds", ":lua require('dap').step_into()<CR>")
 utils.keymap("n", "<Leader>do", ":lua require('dap').step_out()<CR>")
-
-
 
 utils.keymap("n", "<Leader>dhh", ":lua require('dap.ui.variables').hover()<CR>")
 utils.keymap("v", "<Leader>dhv", ":lua require('dap.ui.variables').visual_hover()<CR>")
@@ -69,8 +69,7 @@ utils.keymap("n", "<Leader>dd", ":lua require('dap').down()<CR>")
 utils.keymap("n", "<Leader>du", ":lua require('dap').up()<CR>")
 utils.keymap("n", "<Leader>dp", ":lua require('dapui').setup()<CR>")
 
-
-
+utils.keymap("n", "<Leader>hh", ":cd %:h <CR>")
 
 -- Popup management --how the fuck are you supposed to do this??? i dont care
 --utils.keymap('i','<expr> <Tab>',[[pumvisible() ? "\<C-n>" : "\<Tab>"]],{expr = true})

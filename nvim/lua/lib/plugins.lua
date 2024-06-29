@@ -28,8 +28,13 @@ return require("packer").startup(function()
     end,
   })
 
+  use({
+    "nvim-telescope/telescope-file-browser.nvim",
+    requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+  })
+
   use({ "ms-jpq/coq_nvim" })
-  use({ "scrooloose/nerdtree", on = "NERDTreeToggle" })
+  --use({ "scrooloose/nerdtree", on = "NERDTreeToggle" })
   use({ "mhinz/vim-startify" })
   use({ "junegunn/limelight.vim" })
 
@@ -54,6 +59,27 @@ return require("packer").startup(function()
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim",
     },
+  })
+
+  use({
+    "CopilotC-Nvim/CopilotChat.nvim",
+    branch = "canary",
+    dependencies = {
+      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
+      { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+    },
+
+    config = function()
+      require("CopilotChat").setup({})
+    end,
+  })
+
+  use({
+    "pmizio/typescript-tools.nvim",
+    requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    config = function()
+      require("typescript-tools").setup({})
+    end,
   })
 
   use({
@@ -202,6 +228,13 @@ return require("packer").startup(function()
       require("lib.plugin.fzf")
     end,
   })
+  use({
+    "stevearc/oil.nvim",
+    config = function()
+      require("oil").setup()
+    end,
+  })
+
   use({ "junegunn/fzf.vim" })
 
   use({ "morhetz/gruvbox" })

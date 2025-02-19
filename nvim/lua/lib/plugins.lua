@@ -78,7 +78,7 @@ return require("lazy").setup({
     config = function()
       require("CopilotChat").setup({})
     end,
-  })
+  },
 
   {
     "pmizio/typescript-tools.nvim",

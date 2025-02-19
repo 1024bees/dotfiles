@@ -65,9 +65,9 @@ return require("lazy").setup({
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim",
     },
-  })
+  },
 
-  use({
+  {
     "CopilotC-Nvim/CopilotChat.nvim",
     branch = "canary",
     dependencies = {
@@ -88,25 +88,28 @@ return require("lazy").setup({
     end,
   },
 
-  use({
+  {
     "samjwill/nvim-unception",
-    setup = function()
+    init = function()
       vim.g.unception_delete_replaced_buffer = true
       --vim.g.unception_open_buffer_in_new_tab = true
       -- Optional settings go here!
       -- e.g.) vim.g.unception_open_buffer_in_new_tab = true
     end,
-  })
-  use({
+  },
+
+  {
     "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
-    "jay-babu/mason-nvim-dap.nvim",
-    "jay-babu/mason-null-ls.nvim",
-    run = ":MasonUpdate", -- :MasonUpdate updates registry contents,
+    dependencies = {
+      "williamboman/mason-lspconfig.nvim",
+      "jay-babu/mason-nvim-dap.nvim",
+      "jay-babu/mason-null-ls.nvim",
+    },
+    build = ":MasonUpdate", -- :MasonUpdate updates registry contents
     config = function()
       require("lib.plugin.mason")
     end,
-  })
+  },
 
   use({ "akinsho/flutter-tools.nvim", requires = "nvim-lua/plenary.nvim" })
 

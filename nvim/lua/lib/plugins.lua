@@ -16,10 +16,10 @@ return require("lazy").setup({
     },
   },
 
-  use({ "ms-jpq/coq_nvim" })
-  --use({ "scrooloose/nerdtree", on = "NERDTreeToggle" })
-  use({ "mhinz/vim-startify" })
-  use({ "junegunn/limelight.vim" })
+  { "ms-jpq/coq_nvim" },
+  --{ "scrooloose/nerdtree", event = "VeryLazy" }, -- Converted 'on' to 'event'
+  { "mhinz/vim-startify" },
+  { "junegunn/limelight.vim" },
 
   use({
     "neovim/nvim-lspconfig",
@@ -80,13 +80,13 @@ return require("lazy").setup({
     end,
   })
 
-  use({
+  {
     "pmizio/typescript-tools.nvim",
-    requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
     config = function()
       require("typescript-tools").setup({})
     end,
-  })
+  },
 
   use({
     "samjwill/nvim-unception",
@@ -261,4 +261,4 @@ return require("lazy").setup({
     "rcarriga/nvim-dap-ui",
     requires = { "mfussenegger/nvim-dap" },
   })
-end)
+})

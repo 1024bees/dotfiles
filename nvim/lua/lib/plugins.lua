@@ -1,37 +1,20 @@
-local plugins = {}
-local api = vim.api
+return require("lazy").setup({
+  { "mzlogin/vim-markdown-toc" },
 
-local execute = vim.api.nvim_command
-local fn = vim.fn
-
---local install_path = fn.stdpath('data')..'/site/pack/packer/opt/packer.nvim'
---o
---
---
---if fn.empty(fn.glob(install_path)) > 0 then
---  execute('!git clone https://github.com/wbthomason/packer.nvim '..install_path)
---  execute 'packadd packer.nvim'
---end
-
-vim.cmd([[packadd packer.nvim]])
-
-return require("packer").startup(function()
-  -- Packer can manage itself as an optional plugin
-  use({ "wbthomason/packer.nvim" })
-
-  use({ "mzlogin/vim-markdown-toc" })
-
-  use({
+  {
     "ellisonleao/glow.nvim",
     config = function()
       require("glow").setup()
     end,
-  })
+  },
 
-  use({
+  {
     "nvim-telescope/telescope-file-browser.nvim",
-    requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
-  })
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+      "nvim-lua/plenary.nvim"
+    },
+  },
 
   use({ "ms-jpq/coq_nvim" })
   --use({ "scrooloose/nerdtree", on = "NERDTreeToggle" })

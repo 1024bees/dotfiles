@@ -21,18 +21,18 @@ return require("lazy").setup({
   { "mhinz/vim-startify" },
   { "junegunn/limelight.vim" },
 
-  use({
+  {
     "neovim/nvim-lspconfig",
     config = function()
       require("lib.plugin.lspconfig")
     end,
-  })
+  },
 
-  use({ "aduros/ai.vim" })
+  { "aduros/ai.vim" },
 
-  use({ "LnL7/vim-nix" })
+  { "LnL7/vim-nix" },
 
-  use({
+  {
     "jackMort/ChatGPT.nvim",
     config = function()
       require("chatgpt").setup({
@@ -60,7 +60,7 @@ return require("lazy").setup({
       })
     end,
 
-    requires = {
+    dependencies = {
       "MunifTanjim/nui.nvim",
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim",

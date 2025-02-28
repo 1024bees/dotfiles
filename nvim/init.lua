@@ -2,7 +2,7 @@
 local remap = vim.api.nvim_set_keymap
 vim.g.mapleader = " "
 local utils = require("lib.utils")
-
+vim.o.termguicolors = true
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then

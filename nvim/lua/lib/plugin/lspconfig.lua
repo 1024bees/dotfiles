@@ -273,7 +273,6 @@ nvim_lsp.basedpyright.setup({
 
 nvim_lsp.rnix.setup({ on_attach = on_attach, capabilities = capabilities })
 nvim_lsp.buck2.setup({ on_attach = on_attach, capabilities = capabilities })
-nvim_lsp.bufls.setup({ on_attach = on_attach, capabilities = capabilities })
 
 nvim_lsp.svls.setup({ on_attach = on_attach, capabilities = capabilities })
 

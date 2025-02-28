@@ -12,7 +12,7 @@ return require("lazy").setup({
     "nvim-telescope/telescope-file-browser.nvim",
     dependencies = {
       "nvim-telescope/telescope.nvim",
-      "nvim-lua/plenary.nvim"
+      "nvim-lua/plenary.nvim",
     },
   },
 
@@ -68,19 +68,6 @@ return require("lazy").setup({
   },
 
   {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    branch = "canary",
-    dependencies = {
-      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
-      { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
-    },
-
-    config = function()
-      require("CopilotChat").setup({})
-    end,
-  },
-
-  {
     "pmizio/typescript-tools.nvim",
     dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
     config = function()
@@ -97,6 +84,66 @@ return require("lazy").setup({
       -- e.g.) vim.g.unception_open_buffer_in_new_tab = true
     end,
   },
+  {
+    "yetone/avante.nvim",
+    event = "VeryLazy",
+    lazy = false,
+    version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
+    opts = {
+      -- add any opts here
+      -- for example
+      provider = "openai",
+      openai = {
+        endpoint = "https://api.openai.com/v1",
+        model = "o3-mini", -- your desired model (or use gpt-4o, etc.)
+        timeout = 30000, -- timeout in milliseconds
+        temperature = 0, -- adjust if needed
+        max_tokens = 4096,
+        -- reasoning_effort = "high" -- only supported for reasoning models (o1, etc.)
+      },
+    },
+    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+    build = "make",
+    -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "stevearc/dressing.nvim",
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      --- The below dependencies are optional,
+      "echasnovski/mini.pick", -- for file_selector provider mini.pick
+      "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+      "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+      "ibhagwan/fzf-lua", -- for file_selector provider fzf
+      "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+      "zbirenbaum/copilot.lua", -- for providers='copilot'
+      {
+        -- support for image pasting
+        "HakonHarnes/img-clip.nvim",
+        event = "VeryLazy",
+        opts = {
+          -- recommended settings
+          default = {
+            embed_image_as_base64 = false,
+            prompt_for_file_name = false,
+            drag_and_drop = {
+              insert_mode = true,
+            },
+            -- required for Windows users
+            use_absolute_path = true,
+          },
+        },
+      },
+      {
+        -- Make sure to set this up properly if you have lazy=true
+        "MeanderingProgrammer/render-markdown.nvim",
+        opts = {
+          file_types = { "markdown", "Avante" },
+        },
+        ft = { "markdown", "Avante" },
+      },
+    },
+  },
 
   {
     "williamboman/mason.nvim",
@@ -111,9 +158,12 @@ return require("lazy").setup({
     end,
   },
 
-  use({ "akinsho/flutter-tools.nvim", requires = "nvim-lua/plenary.nvim" })
+  {
+    "akinsho/flutter-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+  },
 
-  use({
+  {
     "sotte/presenting.nvim",
     config = function()
       require("presenting").setup({
@@ -122,73 +172,86 @@ return require("lazy").setup({
         },
       })
     end,
-  })
-  use({ "npxbr/gruvbox.nvim", requires = { "rktjmp/lush.nvim" } })
+  },
 
-  use({ "nvim-lua/lsp-status.nvim" })
-  use({
+  {
+    "npxbr/gruvbox.nvim",
+    dependencies = { "rktjmp/lush.nvim" },
+  },
+
+  { "nvim-lua/lsp-status.nvim" },
+
+  {
     "jbyuki/venn.nvim",
     config = function()
       require("lib.plugin.venn")
     end,
-  })
-  use({ "L3MON4D3/LuaSnip", requires = { "rafamadriz/friendly-snippets" } })
-  use({ "saadparwaiz1/cmp_luasnip" })
+  },
 
-  use({
+  {
+    "L3MON4D3/LuaSnip",
+    dependencies = { "rafamadriz/friendly-snippets" },
+  },
+
+  { "saadparwaiz1/cmp_luasnip" },
+
+  {
     "hrsh7th/nvim-cmp",
     config = function()
       require("lib.plugin.cmp")
     end,
-  })
-  use({ "hrsh7th/cmp-nvim-lsp" })
-  use({ "hrsh7th/cmp-buffer" })
+  },
 
-  --
+  { "hrsh7th/cmp-nvim-lsp" },
+  { "hrsh7th/cmp-buffer" },
 
-  use({ "nvim-lua/lsp_extensions.nvim" })
-  use({ "airblade/vim-gitgutter" })
+  { "nvim-lua/lsp_extensions.nvim" },
+  { "airblade/vim-gitgutter" },
 
-  use({ "kosayoda/nvim-lightbulb" })
-  use({
+  { "kosayoda/nvim-lightbulb" },
+
+  {
     "nvim-treesitter/nvim-treesitter",
-    run = function()
+    build = function()
       local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
       ts_update()
     end,
     config = function()
       require("lib.plugin.treesitter")
     end,
-  })
+  },
 
-  use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
+  {
+    "nvim-telescope/telescope-fzf-native.nvim",
+    build = "make",
+  },
 
-  use({
+  {
     "nvim-telescope/telescope.nvim",
-    requires = { { "nvim-lua/popup.nvim" }, { "nvim-lua/plenary.nvim" } },
+    dependencies = { "nvim-lua/popup.nvim", "nvim-lua/plenary.nvim" },
     config = function()
       require("lib.plugin.telescope")
     end,
-  })
+  },
 
-  use({
+  {
     "feline-nvim/feline.nvim",
     config = function()
       require("lib.plugin.feline")
     end,
-    requires = { "kyazdani42/nvim-web-devicons" },
-  })
+    dependencies = { "kyazdani42/nvim-web-devicons" },
+  },
 
-  use({
+  {
     "p00f/godbolt.nvim",
     config = function()
       require("lib.plugin.godbolt")
     end,
-  })
+  },
 
-  use({
+  {
     "folke/trouble.nvim",
-    requires = "kyazdani42/nvim-web-devicons",
+    dependencies = { "kyazdani42/nvim-web-devicons" },
     config = function()
       require("trouble").setup({
         -- your configuration comes here
@@ -196,72 +259,58 @@ return require("lazy").setup({
         -- refer to the configuration section below
       })
     end,
-  })
+  },
 
-  use({
+  {
     "numToStr/FTerm.nvim",
     config = function()
       require("lib.plugin.fterm")
     end,
-  })
+  },
 
-  --use {
-  --    "nvim-neorg/neorg",
-  --    config = function()
-  --        require('lib.plugin.neorg')
-  --    end,
-  --    requires = {"nvim-lua/plenary.nvim",   "folke/zen-mode.nvim"},
-
-  --}
-
-  --use({
-  --  "NTBBloodbath/galaxyline.nvim",
-  --  branch = "main",
-  --  config = function()
-  --    require("lib.plugin.statusline")
-  --  end,
-  --  requires = { "kyazdani42/nvim-web-devicons" },
-  --})
-
-  use({
+  {
     "romgrk/barbar.nvim",
-    requires = { "kyazdani42/nvim-web-devicons" },
-  })
+    dependencies = { "kyazdani42/nvim-web-devicons" },
+  },
 
-  use({ "tpope/vim-fugitive" })
-  use({ "vimwiki/vimwiki" })
-  use({ "powerman/vim-plugin-AnsiEsc" })
-  use({
+  { "tpope/vim-fugitive" },
+  { "vimwiki/vimwiki" },
+  { "powerman/vim-plugin-AnsiEsc" },
+
+  {
     "junegunn/fzf",
     config = function()
       require("lib.plugin.fzf")
     end,
-  })
-  use({
+  },
+
+  {
     "stevearc/oil.nvim",
     config = function()
       require("oil").setup()
     end,
-  })
+  },
 
-  use({ "junegunn/fzf.vim" })
+  { "junegunn/fzf.vim" },
 
-  use({ "morhetz/gruvbox" })
-  use({ "simrat39/rust-tools.nvim" })
+  { "morhetz/gruvbox" },
+  { "simrat39/rust-tools.nvim" },
 
-  use({ "rust-lang/rust.vim" })
+  { "rust-lang/rust.vim" },
 
-  use({ "tjdevries/nlua.nvim" })
-  use({ "jose-elias-alvarez/null-ls.nvim" })
-  use({ "jose-elias-alvarez/nvim-lsp-ts-utils" })
-  use({
+  { "tjdevries/nlua.nvim" },
+  { "jose-elias-alvarez/null-ls.nvim" },
+  { "jose-elias-alvarez/nvim-lsp-ts-utils" },
+
+  {
     "mfussenegger/nvim-dap",
     config = function()
       require("lib.plugin.dap")
     end,
-  })
-  use({
+  },
+
+  {
     "rcarriga/nvim-dap-ui",
-    requires = { "mfussenegger/nvim-dap" },
-  })
+    dependencies = { "mfussenegger/nvim-dap" },
+  },
 })

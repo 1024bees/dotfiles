@@ -4,9 +4,9 @@
 #
 #mkdir -p ~/.local/bin/
 #cd ~/.local/bin/
-#wget https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-macos.tar.gz
-#tar xzvf nvim-macos.tar.gz
-#mv ./nvim-macos/bin/nvim ~/.local/bin
+wget https://github.com/neovim/neovim/releases/download/v0.10.1/nvim-macos.tar.gz
+tar xzvf nvim-macos.tar.gz
+mv ./nvim-macos/bin/nvim ~/.local/bin
 
 
 

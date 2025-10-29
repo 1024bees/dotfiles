@@ -18,6 +18,7 @@ utils.keymap("n", "<Leader>q", ":q!<Enter>")
 utils.keymap("n", "<Leader>x", ":x!<Enter>")
 utils.keymap("n", "<Leader>z", ":x!<Enter>")
 utils.keymap("n", "<Leader>d", ":bd!<Enter>")
+utils.keymap("n", "<Leader>o", ":%bd|e#<Enter>")
 utils.keymap("n", "<Leader>n", ":bn<Enter>")
 utils.keymap("n", "<Leader>m", ":bp<Enter>")
 
@@ -33,7 +34,8 @@ utils.keymap("v", "<Tab>", ">gv")
 utils.keymap("v", "<S-Tab>", "<gv")
 utils.keymap("v", "<Tab>", ">gv")
 
-utils.keymap("n", "<Leader>c", ":CopilotChatToggle<CR>")
+utils.keymap("n", "<Leader>cc", ":ClaudeCode<CR>")
+utils.keymap("n", "<Leader>cr", ":ClaudeCodeResume<CR>")
 
 -- Debugging
 utils.keymap("n", "<Leader>g", ":lua require('dap').toggle_breakpoint()<CR>")

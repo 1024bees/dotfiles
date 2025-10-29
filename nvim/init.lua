@@ -59,7 +59,7 @@ utils.keymap("v", "<Leader>e", ":call Bazelify()<Enter>")
 require("lib.mappings2")
 require("lib.autocmds")
 require("lib.plugins")
-vim.cmd("colorscheme gruvbox")
+vim.cmd("colorscheme terafox")
 require("lib.settings")
 --require("lib.plugin.dapui")
 

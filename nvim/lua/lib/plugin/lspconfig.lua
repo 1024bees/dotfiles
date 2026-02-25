@@ -1,153 +1,273 @@
--- nvim_lsp object
---
---
---
+-- Neovim 0.11+ native LSP configuration
+-- Uses vim.lsp.config() and vim.lsp.enable() instead of nvim-lspconfig
 
+-- Mason for installing LSP servers
 require("mason").setup()
 
 require("mason-lspconfig").setup({
   ensure_installed = {
-    -- Replace these with whatever servers you want to install
     "lua_ls",
     "rust_analyzer",
     "clangd",
     "cmake",
-
     "basedpyright",
     "bashls",
+    "vtsls",
   },
+  -- Disable automatic setup - we use native vim.lsp.config
+  handlers = {},
 })
 
 require("mason-null-ls").setup({
-  ensure_installed = { "stylua", "jq", "eslint" },
+  ensure_installed = { "stylua", "jq" },
 })
 
-local nvim_lsp = require("lspconfig")
+-- LSP status integration
 local lsp_status = require("lsp-status")
----local lsp_extension = require'lsp_extensions'
-
 lsp_status.register_progress()
 lsp_status.config({
   kind_labels = {},
   current_function = false,
   indicator_separator = " ",
-  indicator_errors = "",
-  indicator_warnings = "",
-  indicator_info = "",
+  indicator_errors = "",
+  indicator_warnings = "",
+  indicator_info = "",
   indicator_hint = "!",
-  indicator_ok = "",
+  indicator_ok = "",
   select_symbol = nil,
   status_symbol = "",
   spinner_frames = { "-", "\\", "|", "/" },
 })
 
-local coq = require("coq")
+-- Build capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = vim.tbl_deep_extend("keep", capabilities, lsp_status.capabilities)
 capabilities.textDocument.codeLens = { dynamicRegistration = false }
-capabilities = coq.lsp_ensure_capabilities(capabilities)
+capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
 
--- Enable rust_analyzer
+-- Diagnostic configuration (replaces vim.lsp.handlers["textDocument/publishDiagnostics"])
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  update_in_insert = true,
+})
 
-local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+vim.lsp.set_log_level("info")
 
-require("vim.diagnostic")
+-- LspAttach autocommand (replaces on_attach function)
+local augroup = vim.api.nvim_create_augroup("UserLspConfig", { clear = true })
 
-local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...)
-    vim.api.nvim_buf_set_keymap(bufnr, ...)
-  end
-  local function buf_set_option(...)
-    vim.api.nvim_buf_set_option(bufnr, ...)
-  end
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = augroup,
+  callback = function(args)
+    local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if not client then
+      return
+    end
 
-  buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+    -- Set omnifunc
+    vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-  -- Mappings.
-  -- buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  local opts = { noremap = true, silent = true }
-  buf_set_keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+    -- Keymaps using modern vim.keymap.set
+    local opts = { buffer = bufnr, silent = true }
 
-  buf_set_keymap("n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
+    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+    vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts)
+    vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts)
+    vim.keymap.set("n", "<space>wl", function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, opts)
+    vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, opts)
+    vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
+    vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+    vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, opts)
+    vim.keymap.set("n", "<C-n>", vim.diagnostic.goto_next, opts)
+    vim.keymap.set("n", "<C-p>", vim.diagnostic.goto_prev, opts)
 
-  buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+    -- Formatting keymap (conditional on server capability)
+    if client.server_capabilities.documentFormattingProvider then
+      vim.keymap.set("n", "<space>f", function()
+        vim.lsp.buf.format({ async = true })
+      end, opts)
+    end
 
-  buf_set_keymap("n", "<space>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
-  buf_set_keymap("n", "<space>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
-  buf_set_keymap("n", "<space>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
-  buf_set_keymap("n", "<space>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
-  buf_set_keymap("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
-  buf_set_keymap("n", "<space>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-  buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-  buf_set_keymap("n", "<space>e", "<cmd>lua vim.diagnostic.show_line_diagnostics()<CR>", opts)
-  buf_set_keymap("n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
-  buf_set_keymap("n", "<C-n>", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
-  buf_set_keymap("n", "<C-p>", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
+    -- Format on save
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      group = vim.api.nvim_create_augroup("LspFormatting_" .. bufnr, { clear = true }),
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.format()
+      end,
+    })
 
-  -- Enable type inlay hints
+    -- Disable document highlight (hover word highlighting)
+    if client.server_capabilities.documentHighlightProvider then
+      client.server_capabilities.documentHighlightProvider = false
+    end
 
-  -- Set some keybinds conditional on server capabilities
-  if client.server_capabilities.document_formatting then
-    buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.format{async = true}<CR>", opts)
-  elseif client.server_capabilities.document_range_formatting then
-    buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
-  end
-  if client.server_capabilities.documentFormattingProvider then
-    buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.format{async = true}<CR>", opts)
-  end
+    -- lsp-status integration
+    lsp_status.on_attach(client)
+  end,
+})
 
-  vim.api.nvim_create_autocmd("BufWritePre", {
-    group = augroup,
-    buffer = bufnr,
-    callback = function()
-      vim.lsp.buf.format()
-    end,
-  })
+-- Native LSP server configurations using vim.lsp.config
+vim.lsp.config.clangd = {
+  cmd = { "clangd" },
+  filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
+  root_markers = { "compile_commands.json", "compile_flags.txt", ".clangd", ".git" },
+  capabilities = capabilities,
+}
 
-  -- Set autocommands conditional on server_capabilities
-  -- autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-  --
-  --augroup lsp_document_highlight
-  --  autocmd! * <buffer>
-  --  autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-  --  autocmd CursorHold <buffer> lua vim.diagnostic.show_line_diagnostics()
-  --
-  --augroup END
+vim.lsp.config.basedpyright = {
+  cmd = { "basedpyright-langserver", "--stdio" },
+  filetypes = { "python" },
+  root_markers = { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", ".git" },
+  capabilities = capabilities,
+  settings = {
+    basedpyright = {
+      typeCheckingMode = "basic",
+    },
+  },
+}
 
-  if client.server_capabilities.document_highlight then
-    vim.api.nvim_exec(
-      [[
-      hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
-      hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
-      hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
-    ]],
-      false
-    )
-  end
-  lsp_status.on_attach(client)
-end
+vim.lsp.config.rnix = {
+  cmd = { "rnix-lsp" },
+  filetypes = { "nix" },
+  root_markers = { "flake.nix", "default.nix", ".git" },
+  capabilities = capabilities,
+}
 
-local rt = require("rust-tools")
+vim.lsp.config.buck2 = {
+  cmd = { "buck2", "lsp" },
+  filetypes = { "bzl" },
+  root_markers = { ".buckconfig", "BUCK", "TARGETS" },
+  capabilities = capabilities,
+}
 
-local extension_path = vim.env.HOME .. "/.config/vscode/extension/"
-local codelldb_path = extension_path .. "adapter/codelldb"
-local liblldb_path = extension_path .. "lldb/lib/liblldb.so" -- MacOS: This may be .dylib
+vim.lsp.config.svls = {
+  cmd = { "svls" },
+  filetypes = { "verilog", "systemverilog" },
+  root_markers = { ".git" },
+  capabilities = capabilities,
+}
 
-rt.setup({
+vim.lsp.config.taplo = {
+  cmd = { "taplo", "lsp", "stdio" },
+  filetypes = { "toml" },
+  root_markers = { ".git" },
+  capabilities = capabilities,
+}
+
+vim.lsp.config.tailwindcss = {
+  cmd = { "tailwindcss-language-server", "--stdio" },
+  filetypes = { "html", "css", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "svelte" },
+  root_markers = { "tailwind.config.js", "tailwind.config.ts", "postcss.config.js", ".git" },
+  capabilities = capabilities,
+}
+
+vim.lsp.config.vtsls = {
+  cmd = { "vtsls", "--stdio" },
+  filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+  root_markers = { "tsconfig.json", "package.json", "jsconfig.json", ".git" },
+  capabilities = capabilities,
+  settings = {
+    vtsls = {
+      autoUseWorkspaceTsdk = true,
+      experimental = {
+        completion = {
+          enableServerSideFuzzyMatch = true,
+        },
+      },
+    },
+    typescript = {
+      updateImportsOnFileMove = { enabled = "always" },
+      inlayHints = {
+        parameterNames = { enabled = "all" },
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        enumMemberValues = { enabled = true },
+      },
+    },
+    javascript = {
+      updateImportsOnFileMove = { enabled = "always" },
+      inlayHints = {
+        parameterNames = { enabled = "all" },
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        enumMemberValues = { enabled = true },
+      },
+    },
+  },
+}
+
+-- vtsls-specific: disable formatting and add custom keymaps
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client and client.name == "vtsls" then
+      -- Disable formatting (let null-ls/prettier handle it)
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
+
+      -- TypeScript-specific keymaps
+      local opts = { buffer = args.buf, silent = true }
+      vim.keymap.set("n", "gs", function()
+        require("vtsls").commands.organize_imports(0)
+      end, opts)
+      vim.keymap.set("n", "go", function()
+        require("vtsls").commands.add_missing_imports(0)
+      end, opts)
+      vim.keymap.set("n", "gR", function()
+        require("vtsls").commands.file_references(0)
+      end, opts)
+    end
+  end,
+})
+
+-- Disable unwanted LSPs that Neovim 0.11+ auto-enables
+-- Setting cmd to false prevents them from starting
+--vim.lsp.config("eslint", {
+--  cmd = false,
+--})
+
+vim.lsp.config("ts_ls", {
+  cmd = false,
+})
+
+vim.lsp.config("rust_analyzer", {
+  cmd = false,
+})
+
+-- Enable all configured servers
+vim.lsp.enable({
+  "clangd",
+  "basedpyright",
+  "rnix",
+  "buck2",
+  "svls",
+  "taplo",
+  "tailwindcss",
+  "vtsls",
+})
+
+-- Rustaceanvim configuration (handles rust-analyzer separately)
+vim.g.rustaceanvim = {
   server = {
-    on_attach = function(client, bufnr)
-      on_attach(client, bufnr)
-      vim.keymap.set("n", "A", rt.hover_actions.hover_actions, { buffer = bufnr })
-    end,
     capabilities = capabilities,
-    settings = {
-
+    default_settings = {
       ["rust-analyzer"] = {
         assist = {
           importMergeBehaviour = "full",
           importPrefix = "plain",
         },
-
         callInfo = {
           full = true,
         },
@@ -182,20 +302,15 @@ rt.setup({
             "website",
           },
         },
-
         cargo = {
           unsetTest = { "core", "esp-hal-common", "esp-hal-procmacros", "esp32-hal", "esp32c3-hal" },
           loadOutDirsFromCheck = true,
-          --noDefaultFeatures = true,
           buildScripts = {
-            enable = "true",
+            enable = true,
           },
         },
 
-        checkOnSave = {
-          allFeatures = true,
-          --allTargets = false,
-        },
+
 
         procMacro = {
           enable = true,
@@ -212,115 +327,16 @@ rt.setup({
       },
     },
   },
+}
 
-  dap = {
-    adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
-  },
-})
-
---nvim_lsp.rust_analyzer.setup{
---  on_attach=on_attach,
---  capabilities = capabilities,
---  settings = {
---        ["rust-analyzer"] = {
---            assist = {
---                importMergeBehaviour = "full",
---                importPrefix = "plain",
---            },
---
---            callInfo = {
---                full = true,
---            };
---
---            cargo = {
---                loadOutDirsFromCheck = true
---            },
---
---            checkOnSave = {
---                --allFeatures = true,
---            },
---
---            procMacro = {
---                enable = true,
---            },
---            diagnostics = {
---                enable = true,
---                disabled = { "unresolved-proc-macro" },
---                enableExperimental = true,
---                warningsAsHint = {},
---            },
---        },
---    },
---}
-nvim_lsp.clangd.setup({
-  on_attach = on_attach,
-  cmd = { "clangd" },
-  capabilities = capabilities,
-  filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
-})
--- Enable diagnostics
-vim.lsp.set_log_level("info")
---nvim_lsp.pylsp.setup({on_attach=on_attach, capabilities = capabilities})
-nvim_lsp.basedpyright.setup({
-  on_attach = on_attach,
-  capabilities = server_capabilities,
-  settings = {
-    basedpyright = {
-      typeCheckingMode = "basic",
-    },
-  },
-})
-
-nvim_lsp.rnix.setup({ on_attach = on_attach, capabilities = capabilities })
-nvim_lsp.buck2.setup({ on_attach = on_attach, capabilities = capabilities })
-
-nvim_lsp.svls.setup({ on_attach = on_attach, capabilities = capabilities })
-
-nvim_lsp.taplo.setup({ on_attach = on_attach, capabilities = capabilities })
-
-nvim_lsp.tailwindcss.setup({ on_attach = on_attach, capabilities = capabilities })
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-  virtual_text = true,
-  signs = true,
-  update_in_insert = true,
-})
-
-local tss = require("typescript-tools")
-tss.setup({
-  on_attach = function(client, bufnr)
-    local function buf_set_keymap(...)
-      vim.api.nvim_buf_set_keymap(bufnr, ...)
-    end
-    local opts = { noremap = true, silent = true }
-
-    client.server_capabilities.document_formatting = false
-    client.server_capabilities.document_range_formatting = false
-    local ts_utils = require("nvim-lsp-ts-utils")
-    ts_utils.setup({})
-    ts_utils.setup_client(client)
-    buf_set_keymap("n", "gs", ":TSLspOrganize<CR>", opts)
-    buf_set_keymap("n", "gi", ":TSLspRenameFile<CR>", opts)
-    buf_set_keymap("n", "go", ":TSLspImportAll<CR>", opts)
-    on_attach(client, bufnr)
-  end,
-})
-
+-- null-ls configuration
 local null_ls = require("null-ls")
 null_ls.setup({
   sources = {
-    --null_ls.builtins.diagnostics.eslint,
-    --null_ls.builtins.code_actions.eslint,
-    null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.black,
-    --null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.stylua.with({ extra_args = { "--indent-type", "Spaces", "--indent-width", "2" } }),
   },
-  on_attach = on_attach,
 })
 
-require("flutter-tools").setup({ lsp = { on_attach = on_attach } }) -- use defaults
-
---nvim_lsp.eslint.setup({on_attach=on_attach})
-
---vim.cmd([[ autocmd ColorScheme * :lua require('vim.diagnostic')._define_default_signs_and_highlights() ]])
+-- flutter-tools configuration
+require("flutter-tools").setup({ lsp = { capabilities = capabilities } })

@@ -32,13 +32,12 @@ utils.keymap("n", "nt", [[:lua require'lib.utils'.new_vsplit_zsh()<CR>]])
 --- Indentation Shortcuts ---
 utils.keymap("v", "<Tab>", ">gv")
 utils.keymap("v", "<S-Tab>", "<gv")
-utils.keymap("v", "<Tab>", ">gv")
 
 utils.keymap("n", "<Leader>cc", ":ClaudeCode<CR>")
 utils.keymap("n", "<Leader>cr", ":ClaudeCodeResume<CR>")
 
 -- Debugging
-utils.keymap("n", "<Leader>g", ":lua require('dap').toggle_breakpoint()<CR>")
+
 utils.keymap("n", "<F1>", ":lua require('dap').step_over()<CR>")
 utils.keymap("n", "<F2>", ":lua require('dap').step_into()<CR>")
 utils.keymap("n", "<F3>", ":lua require('dap').step_out()<CR>")
@@ -82,6 +81,7 @@ utils.keymap("n", "<Leader>hh", ":cd %:h <CR>")
 
 -- Terminal remaps
 utils.keymap("t", "<Esc>", [[<C-\><C-n>]])
+utils.keymap("t", "<C-j>", [[<C-\><C-n>]])
 utils.keymap("n", "<C-b>", [[:silent! Startify<CR>]])
 
 -- Plugin specific TODO: this should be moved to config files

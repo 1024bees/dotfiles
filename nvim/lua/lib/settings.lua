@@ -38,7 +38,6 @@ vim.cmd("autocmd BufRead,BufNewFile *.md,*.txt setlocal spell spelllang=en_us")
 --global stuff, encoding etc
 o.termguicolors = true
 o.guifont = "consolas"
-o.termguicolors = true
 o.showcmd = true
 o.showmatch = true
 o.ruler = true
@@ -58,7 +57,6 @@ o.autowrite = true
 o.backspace = "indent,eol,start"
 o.backupcopy = "yes"
 o.hlsearch = true
-o.ignorecase = true
 o.incsearch = true
 o.lcs = "tab:/|/,space:·"
 o.compatible = false
@@ -70,14 +68,12 @@ o.undodir = os.getenv("HOME") .. "/.vim/undo-dir"
 o.undofile = true
 o.laststatus = 2
 o.smarttab = true
+o.showcmd = true
 
 -- Window stuff
 wo.number = true
-wo.wrap = false
-
 --wo.colorcolumn = '101'
 wo.list = true
-wo.number = true
 --wo.relativenumber = true
 wo.wrap = true
 
@@ -101,9 +97,3 @@ opt("b", "expandtab", true)
 opt("b", "autoindent", true)
 
 vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
-
--- Colorscheme
-vim.g.base16colorspace = 256
-
-vim.cmd("filetype plugin indent on")
-vim.cmd("autocmd BufRead,BufNewFile *.md,*.txt setlocal spell spelllang=en_us")

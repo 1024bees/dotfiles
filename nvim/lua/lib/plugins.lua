@@ -1,5 +1,28 @@
 return require("lazy").setup({
   { "mzlogin/vim-markdown-toc" },
+  {
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    ---@type snacks.Config
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+      bigfile = { enabled = true },
+      dashboard = { enabled = true },
+      explorer = { enabled = true },
+      indent = { enabled = true },
+      input = { enabled = true },
+      picker = { enabled = true },
+      notifier = { enabled = true },
+      quickfile = { enabled = true },
+      scope = { enabled = true },
+      ---scroll = { enabled = true },
+      statuscolumn = { enabled = true },
+      words = { enabled = true },
+    },
+  },
 
   {
     "ellisonleao/glow.nvim",
@@ -16,7 +39,7 @@ return require("lazy").setup({
     },
   },
 
-  { "ms-jpq/coq_nvim" },
+  -- { "ms-jpq/coq_nvim" },
   --{ "scrooloose/nerdtree", event = "VeryLazy" }, -- Converted 'on' to 'event'
   { "mhinz/vim-startify" },
   { "junegunn/limelight.vim" },
@@ -27,34 +50,20 @@ return require("lazy").setup({
       require("lib.plugin.lspconfig")
     end,
   },
+  -- Lazy
+  {
+    "dgagn/diagflow.nvim",
+    event = "LspAttach",
+    opts = {},
+  },
 
   { "aduros/ai.vim" },
 
   { "LnL7/vim-nix" },
 
   {
-    "pmizio/typescript-tools.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    config = function()
-      require("typescript-tools").setup({})
-    end,
-  },
-  {
-    "greggh/claude-code.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim", -- Required for git operations
-    },
-    config = function()
-      require("claude-code").setup({
-        window = {
-          split_ratio = 0.3, -- Percentage of screen for the terminal window (height for horizontal, width for vertical splits)
-          position = "vertical", -- Position of the window: "botright", "topleft", "vertical", "float", etc.
-          enter_insert = true, -- Whether to enter insert mode when opening Claude Code
-          hide_numbers = true, -- Hide line numbers in the terminal window
-          hide_signcolumn = true, -- Hide the sign column in the terminal window
-        },
-      })
-    end,
+    "yioneko/nvim-vtsls",
+    dependencies = { "neovim/nvim-lspconfig" },
   },
 
   {
@@ -65,65 +74,6 @@ return require("lazy").setup({
       -- Optional settings go here!
       -- e.g.) vim.g.unception_open_buffer_in_new_tab = true
     end,
-  },
-  {
-    "yetone/avante.nvim",
-    build = vim.fn.has("win32") ~= 0 and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
-      or "make",
-    event = "VeryLazy",
-    version = false,
-    opts = {
-      provider = "claude",
-      providers = {
-        claude = {
-          endpoint = "https://api.anthropic.com",
-          model = "claude-sonnet-4-20250514",
-          timeout = 30000,
-        },
-        o3 = {
-          endpoint = "https://api.openai.com",
-          model = "o3",
-          timeout = 30000,
-        },
-        o4_mini_high = {
-          endpoint = "https://api.openai.com",
-          model = "o4-mini-high",
-          timeout = 30000,
-        },
-      },
-    },
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-      "echasnovski/mini.pick",
-      "nvim-telescope/telescope.nvim",
-      "hrsh7th/nvim-cmp",
-      "ibhagwan/fzf-lua",
-      "stevearc/dressing.nvim",
-      "nvim-tree/nvim-web-devicons",
-      "zbirenbaum/copilot.lua",
-      {
-        "HakonHarnes/img-clip.nvim",
-        event = "VeryLazy",
-        opts = {
-          default = {
-            embed_image_as_base64 = false,
-            prompt_for_file_name = false,
-            drag_and_drop = {
-              insert_mode = true,
-            },
-            use_absolute_path = true,
-          },
-        },
-      },
-      {
-        "MeanderingProgrammer/render-markdown.nvim",
-        opts = {
-          file_types = { "markdown", "Avante" },
-        },
-        ft = { "markdown", "Avante" },
-      },
-    },
   },
 
   {
@@ -181,20 +131,30 @@ return require("lazy").setup({
     dependencies = { "rafamadriz/friendly-snippets" },
   },
 
-  { "saadparwaiz1/cmp_luasnip" },
+  -- { "saadparwaiz1/cmp_luasnip" },
+  -- { "hrsh7th/nvim-cmp" },
+  -- { "hrsh7th/cmp-nvim-lsp" },
+  -- { "hrsh7th/cmp-buffer" },
 
   {
-    "hrsh7th/nvim-cmp",
+    "saghen/blink.cmp",
+    version = "1.*",
+    dependencies = {
+      "L3MON4D3/LuaSnip",
+      "rafamadriz/friendly-snippets",
+    },
     config = function()
-      require("lib.plugin.cmp")
+      require("lib.plugin.blink")
     end,
   },
 
-  { "hrsh7th/cmp-nvim-lsp" },
-  { "hrsh7th/cmp-buffer" },
-
   { "nvim-lua/lsp_extensions.nvim" },
-  { "airblade/vim-gitgutter" },
+  {
+    "lewis6991/gitsigns.nvim",
+    config = function()
+      require("gitsigns").setup()
+    end,
+  },
 
   { "kosayoda/nvim-lightbulb" },
 
@@ -223,11 +183,11 @@ return require("lazy").setup({
   },
 
   {
-    "feline-nvim/feline.nvim",
+    "nvim-lualine/lualine.nvim",
     config = function()
-      require("lib.plugin.feline")
+      require("lib.plugin.lualine")
     end,
-    dependencies = { "kyazdani42/nvim-web-devicons" },
+    dependencies = { "nvim-tree/nvim-web-devicons" },
   },
 
   {
@@ -282,13 +242,41 @@ return require("lazy").setup({
   { "junegunn/fzf.vim" },
 
   { "morhetz/gruvbox" },
-  { "simrat39/rust-tools.nvim" },
+  {
+    "mrcjkb/rustaceanvim",
+    version = "^5",
+    lazy = false,
+  },
+
+  {
+    "coder/claudecode.nvim",
+    dependencies = { "folke/snacks.nvim" },
+    config = true,
+    keys = {
+      { "<leader>a", nil, desc = "AI/Claude Code" },
+      { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
+      { "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
+      { "<leader>ar", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
+      { "<leader>aC", "<cmd>ClaudeCode --continue<cr>", desc = "Continue Claude" },
+      { "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>", desc = "Select Claude model" },
+      { "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", desc = "Add current buffer" },
+      { "<D-l>", "<cmd>ClaudeCodeSend<cr>", mode = "v", desc = "Send to Claude" },
+      {
+        "<leader>as",
+        "<cmd>ClaudeCodeTreeAdd<cr>",
+        desc = "Add file",
+        ft = { "NvimTree", "neo-tree", "oil", "minifiles", "netrw" },
+      },
+      -- Diff management
+      { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
+      { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
+    },
+  },
 
   { "rust-lang/rust.vim" },
 
   { "tjdevries/nlua.nvim" },
   { "nvimtools/none-ls.nvim" },
-  { "jose-elias-alvarez/nvim-lsp-ts-utils" },
 
   {
     "mfussenegger/nvim-dap",
